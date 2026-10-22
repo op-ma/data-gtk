@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informasi Data GTK</title>
+<meta name="theme-color" content="#0f766e">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f3f6f5;--card:#fff;--tx:#10231f;--mut:#62756f;--line:#e2eae7;--p:#0f766e;--p2:#14b8a6;--gold:#d4a02a;--sh:0 8px 30px rgba(16,35,31,.07);color-scheme:light}
+/* tema: terang = default, gelap = [data-theme=dark] */
+:root[data-theme=dark]{--bg:#0b1513;--card:#121f1c;--tx:#e6f1ee;--mut:#8ca39c;--line:#223530;--sh:0 8px 30px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:12.5px}
+.hero{background:linear-gradient(135deg,#0b4f49,#0f766e 55%,#14b8a6);color:#fff;padding:14px 14px 60px}
+.wrap{max-width:1240px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hero h1{margin:0;font-size:18px;font-weight:800;letter-spacing:-.5px}.hero p{margin:2px 0 0;opacity:.8;font-size:11.5px}
+.btn{border:0;border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.16);color:#fff;transition:.2s}
+.btn:hover{background:rgba(255,255,255,.28)}
+.btn.s{background:var(--p);color:#fff}.btn.s:hover{background:#0b5f58}
+main.wrap{margin:-44px auto 24px;padding:0 14px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:12px;border:1px solid var(--line)}
+.filters{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;align-items:end}.filters .sr{grid-column:1/-1}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:6px;padding:6px;margin-bottom:18px;width:fit-content;max-width:100%}
+.tabs button{border:0;background:none;color:var(--mut);padding:10px 18px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
+.tabs button.on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 6px 16px rgba(20,184,166,.35)}
+label{display:block;font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+input,select{width:100%;padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font:inherit;outline:0}
+input:focus,select:focus{border-color:var(--p2);box-shadow:0 0 0 3px rgba(20,184,166,.18)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0}
+.kpi{position:relative;overflow:hidden}.kpi:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--p2),var(--gold))}
+.kpi b{display:block;font-size:20px;font-weight:800;letter-spacing:-.5px;margin-top:4px}.kpi span{color:var(--mut);font-size:11px;font-weight:600}.kpi small{color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:12px}
+.grid h3,.card h3{margin:0 0 8px;font-size:12.5px;font-weight:700}
+.ch{position:relative;height:190px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);cursor:pointer;user-select:none}
+tbody tr:hover{background:rgba(20,184,166,.07)}.click tbody tr{cursor:pointer}
+tfoot td{font-weight:800;background:var(--bg)}
+.av{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:700;font-size:10px;margin-right:8px;vertical-align:middle}
+.nm{display:inline-block;vertical-align:middle}.nm small,td small{display:block;color:var(--mut)}
+.bd{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:rgba(20,184,166,.15);color:var(--p)}
+.bd.w{background:rgba(212,160,42,.18);color:#a87a12}.bd.g{background:rgba(120,140,135,.18);color:var(--mut)}
+.pg{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}.pg .r{display:flex;gap:8px;align-items:center}
+.pg button{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit}.pg button:disabled{opacity:.4}
+.pg select{width:auto}
+dialog{border:0;border-radius:20px;padding:0;max-width:760px;width:94%;background:var(--card);color:var(--tx);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(5,15,13,.6);backdrop-filter:blur(4px)}
+.dh{background:linear-gradient(135deg,#0b4f49,#14b8a6);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;gap:10px}
+.dh h2{margin:0;font-size:15px}.dh p{margin:3px 0 0;opacity:.85}
+.db{padding:12px 16px 16px;max-height:65vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+@media(max-width:560px){.db{grid-template-columns:1fr}}
+.db div span{display:block;font-size:10px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.4px}.db div{white-space:pre-line;word-break:break-word}.db .full{grid-column:1/-1}
+#login{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:linear-gradient(135deg,#0b4f49,#0f766e 55%,#14b8a6);padding:20px}
+#login form{background:var(--card);padding:30px;border-radius:22px;width:100%;max-width:360px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+#login h2{margin:0 0 4px}#login p{color:var(--mut);margin:0 0 18px}#err{color:#e11d48;font-size:12px;min-height:18px;margin:8px 0}
+.dt th{cursor:default}.dt th,.dt td{white-space:normal;padding:5px 8px;font-size:11px;vertical-align:top}.dt thead th{background:var(--bg)}.db .tw{border:1px solid var(--line);border-radius:10px;margin-top:4px}.db .dt tr:last-child td{border-bottom:0}
+body.fl{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+body.fl .hero{padding:10px 14px;flex:none}body.fl .hero p{display:none}
+body.fl main.wrap{flex:1;min-height:0;max-width:none;width:100%;margin:0;padding:10px 14px;display:flex;flex-direction:column}
+body.fl #v-list{flex:1;min-height:0;display:flex;flex-direction:column}
+body.fl #v-list>.lc{flex:1;min-height:0;display:flex;flex-direction:column}
+body.fl #v-list .tw{flex:1;min-height:0;overflow:auto}
+body.fl #tb thead th{position:sticky;top:0;background:var(--card);z-index:1}
+#ft{display:none}
+@media(max-width:700px){
+.hero h1{font-size:15px}.hero .btn{padding:5px 8px}
+.tabs{width:100%}.tabs button{flex:1;padding:8px 6px}
+.filters{grid-template-columns:1fr 1fr}#ft{display:block;grid-column:1/-1}
+#filters:not(.open) .fx,#filters:not(.open) .ua{display:none}
+#tb thead{display:none}#tb tr{display:block;padding:8px 2px;border-bottom:1px solid var(--line)}
+#tb td{display:inline-block;border:0;padding:1px 8px 1px 0;font-size:11px;color:var(--mut)}
+#tb td:first-child{display:block;font-size:12.5px;color:var(--tx);padding-bottom:3px}
+#tb td small{display:inline;margin-left:4px}
+}
+.empty{text-align:center;color:var(--mut);padding:30px}
+</style>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('gtkTheme')||'light'}catch(e){document.documentElement.dataset.theme='light'}</script>
+</head>
+<body>
+<div id="login"><form id="lf"><h2>🔒 Data GTK</h2><p>Masukkan PIN untuk melihat data.</p>
+<label>PIN akses</label><input id="pin" type="password" autocomplete="current-password" required>
+<div id="err"></div><button class="btn s" style="width:100%">Masuk</button></form></div>
+
+<header class="hero"><div class="wrap top">
+<div><h1>Informasi Data GTK</h1><p>Guru &amp; Tenaga Kependidikan · <span id="meta">memuat…</span></p></div>
+<div><button class="btn" id="th" title="Ganti tema">🌙</button> <button class="btn" id="rf">⟳ Muat ulang</button> <button class="btn" id="out">Keluar</button></div>
+</div></header>
+
+<main class="wrap">
+<nav class="card tabs"><button data-v="dash" class="on">📊 Dashboard</button><button data-v="list">👥 Daftar GTK</button></nav>
+<div id="v-dash"><section class="kpis" id="kpis"></section>
+<section class="grid">
+<div class="card"><h3>GTK per Unit Kerja</h3><div class="ch"><canvas id="c1"></canvas></div></div>
+<div class="card"><h3>Status Kontrak</h3><div class="ch"><canvas id="c2"></canvas></div></div>
+<div class="card"><h3>Pendidikan Terakhir</h3><div class="ch"><canvas id="c3"></canvas></div></div>
+<div class="card"><h3>Kelompok Usia</h3><div class="ch"><canvas id="c4"></canvas></div></div>
+</section>
+
+<section class="card" style="margin-bottom:18px"><h3>Rekap per Unit Kerja</h3><div class="tw"><table id="rekap"></table></div></section>
+
+</div>
+<div id="v-list" hidden><section class="card" style="margin-bottom:18px"><div class="filters" id="filters">
+<div class="sr"><label>Pencarian</label><input id="q" placeholder="Cari nama, NIP, jabatan, kampung, email, no. HP…"></div>
+<button class="btn s" id="ft" type="button">⚙ Filter</button>
+<div class="ua"><label>Usia min</label><input id="amin" type="number" min="0" placeholder="mis. 25"></div>
+<div class="ua"><label>Usia maks</label><input id="amax" type="number" min="0" placeholder="mis. 45"></div>
+<button class="btn s ua" id="reset">Reset filter</button></div></section>
+<section class="card lc"><h3>Daftar GTK <span id="cnt" class="bd g"></span><button class="btn s" id="exp" style="float:right;margin-top:-6px">⬇ Ekspor CSV</button></h3>
+<div class="tw"><table class="click" id="tb"></table></div>
+<div class="pg"><span id="info"></span><div class="r"><select id="per"><option>10</option><option>25</option><option>50</option><option>100</option></select>
+<button id="pv">‹</button><span id="pn"></span><button id="nx">›</button></div></div></section>
+</div>
+</main>
+
+<dialog id="dlg"><div class="dh"><div><h2 id="dn"></h2><p id="ds"></p></div><button class="btn" onclick="dlg.close()">✕</button></div><div class="db" id="dbody"></div></dialog>
+
+<script>
+/* ====== KONFIGURASI: tempel URL Web App Apps Script (…/exec) ====== */
+const API_URL = 'https://script.google.com/macros/s/AKfycby58oa_7n1Z61IbCs2Y16Gbs5xmTm0whR6fiJX8228ngLT1Dw0ZvzrAivhzQCEHUWc7HQ/exec';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clean = v => (v && v !== '-') ? v : '';
+const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const pct = (n, t) => t ? Math.round(n / t * 100) + '%' : '0%';
+const f1 = n => n.toFixed(1).replace('.', ',');
+const YR = 365.25 * 864e5, PAL = ['#0f766e','#14b8a6','#d4a02a','#6366f1','#f97316','#0ea5e9','#e11d48','#84cc16','#a855f7'];
+const S1 = ['D4/ S1', 'S2', 'S3'];
+const FIL = [['unit','Unit Kerja'],['fung','Jabatan'],['kontrak','Status Kontrak'],['pend','Pendidikan'],['gender','Gender'],['nikah','Pernikahan'],['tinggal','Status Tinggal'],['alumni','Alumni'],['makan','Fasilitas Makan'],['sert','Sertifikasi']];
+let ALL = [], VIEW = [], sort = {k:'nama', d:1}, page = 1, charts = {}, role = '';
+
+const masa = m => Math.floor(m) + ' th ' + Math.floor((m % 1) * 12) + ' bln';
+function norm(r) {
+  const now = Date.now(), lahir = new Date(r['Tanggal Lahir']), masuk = new Date(r['Tanggal Masuk']);
+  const nama = [clean(r['Gelar Depan']), r['Nama']].filter(Boolean).join(' ') + (clean(r['Gelar Akhir']) ? ', ' + r['Gelar Akhir'] : '');
+  const o = { raw: r, nama, nip: r['NIP'], unit: r['Unit Kerja'], fung: r['Jabatan Fungsional'], struk: clean(r['Jabatan Struktural']),
+    pend: r['Pendidikan Terakhir'], jur: clean(r['Jurusan']), kontrak: r['Status Kontrak'], nikah: r['Status Pernikahan'], tinggal: r['Status Tinggal'], alumni: r['Status Alumni'], makan: r['Fasilitas Makan'], sert: r['Sertifikasi Pemerintah'],
+    gender: String(r['Gender']).toLowerCase() === 'l' ? 'Laki-laki' : 'Perempuan', anak: parseInt(r['Tanggungan Anak']) || 0,
+    usia: isNaN(lahir) ? 0 : (now - lahir) / YR, mk: isNaN(masuk) ? 0 : (now - masuk) / YR };
+  o.q = Object.values(r).join(' ').toLowerCase();
+  return o;
+}
+
+/* ---------- Muat data ---------- */
+async function load(pin) {
+  $('#meta').textContent = 'memuat…';
+  const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ pin }) }).then(r => r.json());
+  if (!res.ok) throw new Error(res.error);
+  sessionStorage.setItem('gtkpin', pin); role = res.role;
+  ALL = res.rows.map(norm);
+  buildFilters();
+  $('#meta').textContent = ALL.length + ' data · akses ' + role + ' · ' + new Date(res.updated).toLocaleString('id-ID');
+  $('#login').style.display = 'none'; dash(); apply();
+}
+$('#lf').onsubmit = async e => { e.preventDefault(); $('#err').textContent = ''; try { await load($('#pin').value); } catch (x) { $('#err').textContent = x.message; } };
+$('#rf').onclick = () => load(sessionStorage.getItem('gtkpin')).catch(x => alert(x.message));
+$('#out').onclick = () => { sessionStorage.clear(); location.reload(); };
+
+/* ---------- Filter & pencarian ---------- */
+function buildFilters() {
+  const box = $('#filters'); box.querySelectorAll('.fx').forEach(e => e.remove());
+  const anchor = $('#amin').parentElement;
+  FIL.forEach(([k, l]) => {
+    const d = document.createElement('div'); d.className = 'fx';
+    const vals = [...new Set(ALL.map(r => r[k]))].filter(Boolean).sort();
+    d.innerHTML = `<label>${l}</label><select id="f_${k}"><option value="">Semua</option>${vals.map(v => `<option>${esc(v)}</option>`).join('')}</select>`;
+    box.insertBefore(d, anchor); d.querySelector('select').onchange = apply;
+  });
+}
+function apply() {
+  const q = $('#q').value.toLowerCase().split(/\s+/).filter(Boolean), amin = +$('#amin').value || 0, amax = +$('#amax').value || 200;
+  VIEW = ALL.filter(r => q.every(t => r.q.includes(t)) && r.usia >= amin && r.usia < amax + 1 && FIL.every(([k]) => !$('#f_' + k).value || r[k] === $('#f_' + k).value));
+  page = 1; table();
+}
+$('#q').oninput = apply; $('#amin').oninput = apply; $('#amax').oninput = apply;
+$('#reset').onclick = () => { $('#q').value = ''; $('#amin').value = ''; $('#amax').value = ''; FIL.forEach(([k]) => $('#f_' + k).value = ''); apply(); };
+
+/* ---------- Render ---------- */
+const by = (a, k) => a.reduce((m, r) => (m[r[k]] = (m[r[k]] || 0) + 1, m), {});
+function chart(id, type, labels, data, horiz) {
+  charts[id] && charts[id].destroy();
+  const st = getComputedStyle(document.documentElement), tc = st.getPropertyValue('--mut'), gc = st.getPropertyValue('--line');
+  charts[id] = new Chart($('#' + id), { type, data: { labels, datasets: [{ data, backgroundColor: PAL, borderRadius: 6, borderWidth: 0 }] },
+    options: { indexAxis: horiz ? 'y' : 'x', maintainAspectRatio: false, plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: tc } } },
+      scales: type === 'doughnut' ? {} : { x: { ticks: { color: tc }, grid: { display: false } }, y: { ticks: { color: tc }, grid: { color: gc }, beginAtZero: true } } } });
+}
+function dash() {
+  Chart.defaults.font.size = 10;
+  const n = ALL.length, L = ALL.filter(r => r.gender === 'Laki-laki').length;
+  const kp = [['Total GTK', n, ''], ['Laki-laki', L, pct(L, n)], ['Perempuan', n - L, pct(n - L, n)],
+    ['Rata-rata usia', f1(avg(ALL.map(r => r.usia))), 'tahun'], ['Rata-rata masa kerja', f1(avg(ALL.map(r => r.mk))), 'tahun'],
+    ['Pegawai tetap', ALL.filter(r => r.kontrak === 'Tetap').length, pct(ALL.filter(r => r.kontrak === 'Tetap').length, n)],
+    ['Pendidikan ≥ S1', ALL.filter(r => S1.includes(r.pend)).length, pct(ALL.filter(r => S1.includes(r.pend)).length, n)],
+    ['Total tanggungan anak', ALL.reduce((s, r) => s + r.anak, 0), 'rata² ' + f1(avg(ALL.map(r => r.anak))) + '/GTK']];
+  $('#kpis').innerHTML = kp.map(([a, b, c]) => `<div class="card kpi"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join('');
+
+  const u = by(ALL, 'unit'); chart('c1', 'bar', Object.keys(u), Object.values(u));
+  const k = by(ALL, 'kontrak'); chart('c2', 'doughnut', Object.keys(k), Object.values(k));
+  const ord = ['SD/MI','SMP/MTs','SMA/MA/SMK','D1','D2','D3','D4/ S1','S2','S3'];
+  chart('c3', 'bar', ord, ord.map(o => ALL.filter(r => r.pend === o).length), true);
+  const gr = [['<25',0,25],['25–34',25,35],['35–44',35,45],['45–54',45,55],['55+',55,200]];
+  chart('c4', 'bar', gr.map(g => g[0]), gr.map(g => ALL.filter(r => r.usia >= g[1] && r.usia < g[2]).length));
+
+  const rows = Object.keys(u).sort().map(un => { const a = ALL.filter(r => r.unit === un); return [un, a]; });
+  const line = (nm, a) => `<td>${esc(nm)}</td><td>${a.length}</td><td>${a.filter(r => r.gender === 'Laki-laki').length}</td><td>${a.filter(r => r.gender !== 'Laki-laki').length}</td><td>${a.filter(r => r.fung === 'Guru').length}</td><td>${a.filter(r => r.kontrak === 'Tetap').length}</td><td>${pct(a.filter(r => S1.includes(r.pend)).length, a.length)}</td><td>${f1(avg(a.map(r => r.usia)))}</td><td>${f1(avg(a.map(r => r.mk)))}</td>`;
+  $('#rekap').innerHTML = '<thead><tr><th>Unit</th><th>Total</th><th>L</th><th>P</th><th>Guru</th><th>Tetap</th><th>≥ S1</th><th>Rata² usia</th><th>Rata² masa kerja</th></tr></thead><tbody>' +
+    rows.map(([un, a]) => `<tr>${line(un, a)}</tr>`).join('') + `</tbody><tfoot><tr>${line('Total', ALL)}</tr></tfoot>`;
+}
+function table() {
+  const per = +$('#per').value, v = [...VIEW].sort((a, b) => (a[sort.k] > b[sort.k] ? 1 : a[sort.k] < b[sort.k] ? -1 : 0) * sort.d);
+  const pages = Math.max(1, Math.ceil(v.length / per)); page = Math.min(page, pages);
+  const cols = [['nama','Nama'],['unit','Unit'],['fung','Jabatan'],['pend','Pendidikan'],['usia','Usia'],['mk','Masa kerja'],['kontrak','Kontrak']];
+  const bd = { Tetap: '', 'Tidak Tetap': 'g', 'Masa Percobaan': 'w' };
+  const ini = s => s.replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  $('#tb').innerHTML = '<thead><tr>' + cols.map(([k, l]) => `<th data-k="${k}">${l}${sort.k === k ? (sort.d > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr></thead><tbody>' +
+    (v.length ? v.slice((page - 1) * per, page * per).map(r => `<tr data-i="${ALL.indexOf(r)}"><td><span class="av">${ini(r.raw['Nama'])}</span><span class="nm">${esc(r.nama)}<small>${esc(r.nip)}</small></span></td><td>${esc(r.unit)}</td><td>${esc(r.fung)}<small>${esc(r.struk || '—')}</small></td><td>${esc(r.pend)}<small>${esc(r.jur)}</small></td><td>${Math.floor(r.usia)} th</td><td>${masa(r.mk)}</td><td><span class="bd ${bd[r.kontrak] ?? 'g'}">${esc(r.kontrak)}</span></td></tr>`).join('') : '<tr><td colspan="7" class="empty">Tidak ada data yang cocok.</td></tr>') + '</tbody>';
+  $('#cnt').textContent = VIEW.length + ' GTK'; $('#pn').textContent = page + ' / ' + pages;
+  $('#info').textContent = v.length ? `Menampilkan ${(page - 1) * per + 1}–${Math.min(page * per, v.length)} dari ${v.length}` : '';
+  $('#pv').disabled = page <= 1; $('#nx').disabled = page >= pages;
+  $('#tb th').parentElement.querySelectorAll('th').forEach(th => th.onclick = () => { sort = { k: th.dataset.k, d: sort.k === th.dataset.k ? -sort.d : 1 }; table(); });
+  $('#tb tbody').onclick = e => { const tr = e.target.closest('tr[data-i]'); tr && detail(ALL[tr.dataset.i]); };
+}
+$('#per').onchange = () => { page = 1; table(); }; $('#pv').onclick = () => { page--; table(); }; $('#nx').onclick = () => { page++; table(); };
+
+const parseEdu = l => { const m = l.match(/^\d+\.\s*(.+?)\s*(?:\((.*?)\))?$/); if (!m) return null; const p = m[1].split(/\s+-\s+/);
+  return [p[0], p.length > 2 ? p.slice(1, -1).join(' - ') : '', p.length > 1 ? p[p.length - 1] : '', m[2] || '']; };
+const parseKel = l => { const m = l.match(/^\d+\.\s*(.+?)\s*\(([^)]*)\)\s*-\s*(.+)$/); if (!m) return null; const p = m[3].split(/\s+-\s+/); if (p.length < 4) return null;
+  const t = p[1].lastIndexOf(','); return [m[1], m[2], p[0], t > -1 ? p[1].slice(0, t).trim() : p[1], t > -1 ? p[1].slice(t + 1).trim() : '', p[2], p.slice(3).join(' - ')]; };
+function tbl(k, v) {
+  const edu = k === 'Riwayat Pendidikan', ls = v.split('\n').map(x => x.trim()).filter(Boolean), rows = ls.map(edu ? parseEdu : parseKel);
+  if (!ls.length || rows.some(x => !x)) return `<div class="full"><span>${esc(k)}</span>${esc(v)}</div>`;
+  const hd = edu ? ['Jenjang', 'Jurusan', 'Institusi', 'Tahun'] : ['Nama', 'Hubungan', 'L/P', 'Tempat lahir', 'Tgl lahir', 'Pendidikan', 'Pekerjaan'];
+  return `<div class="full"><span>${esc(k)}</span><div class="tw"><table class="dt"><thead><tr><th>No</th>${hd.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((c, i) => `<tr><td>${i + 1}</td>${c.map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+}
+function detail(r) {
+  $('#dn').textContent = r.nama; $('#ds').textContent = `${r.fung} · ${r.unit}` + (r.struk ? ' · ' + r.struk : '');
+  $('#dbody').innerHTML = Object.entries(r.raw).filter(([k, v]) => clean(v) && k !== 'Nama').map(([k, v]) =>
+    k === 'Riwayat Pendidikan' || k === 'Data Keluarga' ? tbl(k, v) : `<div class="${v.length > 60 ? 'full' : ''}"><span>${esc(k)}</span>${esc(v)}</div>`).join('') +
+    `<div><span>Usia</span>${Math.floor(r.usia)} tahun</div><div><span>Masa kerja</span>${masa(r.mk)}</div>`;
+  $('#dlg').showModal();
+}
+
+/* ---------- Ekspor CSV (sesuai filter aktif) ---------- */
+$('#exp').onclick = () => {
+  const keys = Object.keys(VIEW[0]?.raw || {}), q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const csv = '\ufeff' + [keys.map(q).join(','), ...VIEW.map(r => keys.map(k => q(r.raw[k])).join(','))].join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'data-gtk.csv'; a.click();
+};
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.body.classList.toggle('fl', b.dataset.v === 'list');
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  $('#v-dash').hidden = b.dataset.v !== 'dash'; $('#v-list').hidden = b.dataset.v !== 'list';
+});
+$('#ft').onclick = () => $('#filters').classList.toggle('open');
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+const root = document.documentElement;
+const setTheme = t => { root.dataset.theme = t; try { localStorage.setItem('gtkTheme', t); } catch (e) {} $('#th').textContent = t === 'dark' ? '☀️' : '🌙'; ALL.length && dash(); };
+$('#th').onclick = () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+$('#th').textContent = root.dataset.theme === 'dark' ? '☀️' : '🌙';
+const saved = sessionStorage.getItem('gtkpin');
+if (saved) load(saved).catch(() => sessionStorage.clear());
+</script>
+</body>
+</html>
