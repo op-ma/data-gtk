@@ -51,17 +51,18 @@ tfoot td{font-weight:800;background:var(--bg)}
 .pg{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}.pg .r{display:flex;gap:8px;align-items:center}
 .pg button{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit}.pg button:disabled{opacity:.4}
 .pg select{width:auto}
-dialog{border:0;border-radius:20px;padding:0;max-width:760px;width:94%;background:var(--card);color:var(--tx);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog{border:0;border-radius:20px;padding:0;max-width:1180px;width:96%;background:var(--card);color:var(--tx);box-shadow:0 30px 80px rgba(0,0,0,.4)}
 dialog::backdrop{background:rgba(5,15,13,.6);backdrop-filter:blur(4px)}
 .dh{background:linear-gradient(135deg,#0b4f49,#14b8a6);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;gap:10px}
-.dh h2{margin:0;font-size:15px}.dh p{margin:3px 0 0;opacity:.85}
-.db{padding:12px 16px 16px;max-height:65vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.dh h2{margin:0;font-size:17px}.dh p{margin:3px 0 0;opacity:.85}
+.db{padding:12px 16px 16px;max-height:80vh;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;font-size:13px}
 @media(max-width:560px){.db{grid-template-columns:1fr}}
 .db div span{display:block;font-size:10px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.4px}.db div{white-space:pre-line;word-break:break-word}.db .full{grid-column:1/-1}
 #login{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:linear-gradient(135deg,#0b4f49,#0f766e 55%,#14b8a6);padding:20px}
 #login form{background:var(--card);padding:30px;border-radius:22px;width:100%;max-width:360px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
 #login h2{margin:0 0 4px}#login p{color:var(--mut);margin:0 0 18px}#err{color:#e11d48;font-size:12px;min-height:18px;margin:8px 0}
-.dt th{cursor:default}.dt th,.dt td{white-space:normal;padding:5px 8px;font-size:11px;vertical-align:top}.dt thead th{background:var(--bg)}.db .tw{border:1px solid var(--line);border-radius:10px;margin-top:4px}.db .dt tr:last-child td{border-bottom:0}
+.dt th{cursor:default}.dt{word-break:normal}.kel td:nth-child(n+3):nth-child(-n+7),.edu td:nth-child(2),.edu td:nth-child(5){white-space:nowrap}
+.dt th,.dt td{white-space:normal;padding:7px 10px;font-size:12px;vertical-align:top}.dt thead th{background:var(--bg)}.db .tw{border:1px solid var(--line);border-radius:10px;margin-top:4px}.db .dt tr:last-child td{border-bottom:0}
 body.fl{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 body.fl .hero{padding:10px 14px;flex:none}body.fl .hero p{display:none}
 body.fl main.wrap{flex:1;min-height:0;max-width:none;width:100%;margin:0;padding:10px 14px;display:flex;flex-direction:column}
@@ -238,7 +239,7 @@ function tbl(k, v) {
   const edu = k === 'Riwayat Pendidikan', ls = v.split('\n').map(x => x.trim()).filter(Boolean), rows = ls.map(edu ? parseEdu : parseKel);
   if (!ls.length || rows.some(x => !x)) return `<div class="full"><span>${esc(k)}</span>${esc(v)}</div>`;
   const hd = edu ? ['Jenjang', 'Jurusan', 'Institusi', 'Tahun'] : ['Nama', 'Hubungan', 'L/P', 'Tempat lahir', 'Tgl lahir', 'Pendidikan', 'Pekerjaan'];
-  return `<div class="full"><span>${esc(k)}</span><div class="tw"><table class="dt"><thead><tr><th>No</th>${hd.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((c, i) => `<tr><td>${i + 1}</td>${c.map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  return `<div class="full"><span>${esc(k)}</span><div class="tw"><table class="dt ${edu ? 'edu' : 'kel'}"><thead><tr><th>No</th>${hd.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((c, i) => `<tr><td>${i + 1}</td>${c.map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
 }
 function detail(r) {
   $('#dn').textContent = r.nama; $('#ds').textContent = `${r.fung} · ${r.unit}` + (r.struk ? ' · ' + r.struk : '');
